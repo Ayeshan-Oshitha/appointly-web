@@ -1,1 +1,0 @@
-# appointly-web
