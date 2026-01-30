@@ -8,7 +8,7 @@ interface InputFieldProps {
   label: string;
   name: string;
   value: string;
-  onChange: (newValue: string) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   type: string;
   error?: string;
@@ -42,7 +42,7 @@ const InputField = ({
             type={isPasswordType && showPassword ? "text" : type}
             placeholder={placeholder}
             value={value}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={onChange}
             className={cn(
               "bg-background text-foreground w-full",
               "focus-visible:ring-2 focus-visible:ring-ring/80 focus-visible:ring-offset-0",
@@ -51,6 +51,7 @@ const InputField = ({
             )}
           />
 
+          {/* Add eye icon to PasswordField */}
           {isPasswordType && (
             <button
               type="button"
@@ -65,6 +66,9 @@ const InputField = ({
             </button>
           )}
         </div>
+        {error && (
+          <p className="ml-2 text-sm font-medium text-red-500">{error}</p>
+        )}
       </div>
     </>
   );

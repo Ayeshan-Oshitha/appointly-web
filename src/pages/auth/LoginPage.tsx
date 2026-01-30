@@ -1,4 +1,5 @@
 import InputField from "@/components/shared/InputField";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -7,14 +8,100 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useLogin } from "@/hooks/useAuth";
+import type { LoginRequestDto } from "@/models/auth.model";
 import { AlertCircle, Loader2 } from "lucide-react";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import z from "zod";
+
+const loginSchema = z.object({
+  email: z.string().min(1, "Email is required").email("Invalid email"),
+  password: z
+    .string()
+    .min(1, "Password is required")
+    .min(6, "Minimum 6 characters"),
+});
 
 const LoginPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState<LoginRequestDto>({
+    email: "",
+    password: "",
+  });
+
+  const navigate = useNavigate();
+
+  const { mutateAsync: login, isPending, isError, error } = useLogin();
+  console.log("isError", isError, error);
+
+  const [formError, setFormError] = useState<{
+    email?: string;
+    password?: string;
+  }>({});
+
+  const validate = () => {
+    const result = loginSchema.safeParse(formData);
+
+    if (!result.success) {
+      const newErrors: Record<string, string> = {};
+
+      for (const issue of result.error.issues) {
+        const field = issue.path[0] as string;
+
+        if (!newErrors[field]) {
+          newErrors[field] = issue.message; // first error only
+        }
+      }
+
+      setFormError(newErrors);
+      return false;
+    }
+
+    setFormError({});
+    return true;
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevForm) => ({
+      ...prevForm,
+      [name]: value,
+    }));
+
+    // Clear error message for the field being edited
+    setFormError((prev) => ({
+      ...prev,
+      [name]: undefined,
+    }));
+  };
+
+  const resetForm = () => {
+    setFormData({
+      email: "",
+      password: "",
+    });
+    setFormError({});
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!validate()) {
+      return;
+    }
+
+    await login(formData, {
+      onSuccess: () => {
+        toast.success("Logged in successfully!", {
+          position: "top-center",
+        });
+        navigate("/", { replace: true });
+      },
+    });
+
+    resetForm();
+  };
 
   return (
     <>
@@ -29,14 +116,29 @@ const LoginPage = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form className="space-y-4">
+            {isError && (
+              <Alert
+                variant="destructive"
+                className="mb-6 border-red-600 bg-red-50"
+              >
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>
+                  {(error as any)?.response?.data?.error ||
+                    error.message ||
+                    "Failed to Login. Try Again"}
+                </AlertDescription>
+              </Alert>
+            )}
+
+            <form className="space-y-4" onSubmit={handleSubmit}>
               <InputField
                 label="Email"
                 name="email"
                 type="email"
                 placeholder="Enter your email here"
-                value={email}
-                onChange={setEmail}
+                value={formData.email}
+                onChange={handleInputChange}
+                error={formError.email}
               />
 
               <InputField
@@ -44,16 +146,17 @@ const LoginPage = () => {
                 name="password"
                 type="password"
                 placeholder="Enter your password here"
-                value={password}
-                onChange={setPassword}
+                value={formData.password}
+                onChange={handleInputChange}
+                error={formError.password}
               />
 
               <Button
                 type="submit"
                 className="w-full mt-6"
-                disabled={isLoading}
+                disabled={isPending}
               >
-                {isLoading ? (
+                {isPending ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Signing in...
