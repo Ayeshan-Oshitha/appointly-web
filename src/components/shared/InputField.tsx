@@ -67,7 +67,9 @@ const InputField = ({
           )}
         </div>
         {error && (
-          <p className="ml-2 text-sm font-medium text-red-500">{error}</p>
+          <p className="ml-2 mt-[-4px] text-sm font-medium text-red-500">
+            {error}
+          </p>
         )}
       </div>
     </>

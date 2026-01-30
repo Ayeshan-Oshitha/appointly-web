@@ -33,7 +33,6 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const { mutateAsync: login, isPending, isError, error } = useLogin();
-  console.log("isError", isError, error);
 
   const [formError, setFormError] = useState<{
     email?: string;
@@ -53,11 +52,9 @@ const LoginPage = () => {
           newErrors[field] = issue.message; // first error only
         }
       }
-
       setFormError(newErrors);
       return false;
     }
-
     setFormError({});
     return true;
   };
@@ -93,9 +90,7 @@ const LoginPage = () => {
 
     await login(formData, {
       onSuccess: () => {
-        toast.success("Logged in successfully!", {
-          position: "top-center",
-        });
+        toast.success("Logged in successfully!");
         navigate("/", { replace: true });
       },
     });
