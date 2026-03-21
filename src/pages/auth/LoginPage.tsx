@@ -9,7 +9,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useLogin } from "@/hooks/useAuth";
-import type { LoginRequestDto } from "@/models/auth.model";
+import type { LoginRequestDto, LoginResponseDto } from "@/models/auth.model";
+import { useAuthStore } from "@/store/auth.store";
 import { AlertCircle, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -33,6 +34,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const { mutateAsync: login, isPending, isError, error } = useLogin();
+  const authLogin = useAuthStore((s) => s.login);
 
   const [formError, setFormError] = useState<{
     email?: string;
@@ -89,7 +91,8 @@ const LoginPage = () => {
     }
 
     await login(formData, {
-      onSuccess: () => {
+      onSuccess: (data: LoginResponseDto) => {
+        authLogin(data.token);
         toast.success("Logged in successfully!");
         navigate("/", { replace: true });
       },
