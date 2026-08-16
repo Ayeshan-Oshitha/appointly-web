@@ -2,9 +2,34 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="/motorhub.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>appointly-web</title>
+    <meta
+      name="description"
+      content="MotorHub — book workshop appointments and track your vehicle's service history."
+    />
+    <meta name="theme-color" content="#2858cd" />
+    <title>MotorHub</title>
+    <script>
+      // Apply the stored theme before first paint to avoid a flash of the
+      // wrong theme. The key must match THEME_STORAGE_KEY in
+      // src/context/theme-context.ts.
+      (function () {
+        try {
+          var stored = localStorage.getItem("motorhub-theme");
+          var isDark =
+            stored === "dark" ||
+            ((!stored || stored === "system") &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches);
+          document.documentElement.classList.toggle("dark", isDark);
+          document.documentElement.style.colorScheme = isDark
+            ? "dark"
+            : "light";
+        } catch (e) {
+          /* fall back to the light theme */
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
