@@ -4,7 +4,26 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>appointly-web</title>
+    <title>Appointly</title>
+    <script>
+      // Apply the stored theme before first paint to avoid a flash of the
+      // wrong theme. Kept in sync with src/providers/ThemeProvider.tsx.
+      (function () {
+        try {
+          var stored = localStorage.getItem("appointly-theme");
+          var isDark =
+            stored === "dark" ||
+            ((!stored || stored === "system") &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches);
+          document.documentElement.classList.toggle("dark", isDark);
+          document.documentElement.style.colorScheme = isDark
+            ? "dark"
+            : "light";
+        } catch (e) {
+          /* fall back to the light theme */
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

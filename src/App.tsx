@@ -1,52 +1,31 @@
+import { Button } from "@/components/ui/button";
+import { useLogout } from "@/hooks/useAuth";
+import { PATHS } from "@/routes/paths";
+import { useCurrentUser } from "@/store/auth.store";
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "./store/auth.store";
-import { useEffect } from "react";
 
 function App() {
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const logout = useAuthStore((s) => s.logout);
+  const user = useCurrentUser();
+  const logout = useLogout();
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
-    navigate("/auth/login", { replace: true });
+    navigate(PATHS.login, { replace: true });
   };
 
   return (
-    <>
-      <p className="text-2xl text-center mt-20">Welcome to Appointly</p>
+    <div className="flex min-h-screen flex-col items-center bg-background">
+      <h1 className="mt-20 text-2xl text-center text-foreground">
+        Welcome to Appointly{user ? `, ${user.firstName}` : ""}
+      </h1>
 
-      {/* Show when logged in */}
-      {isAuthenticated() && (
-        <div className="flex justify-center mt-6">
-          <button
-            onClick={handleLogout}
-            className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700"
-          >
-            Logout
-          </button>
-        </div>
-      )}
-
-      {/* Show when not logged in */}
-      {!isAuthenticated() && (
-        <div className="flex justify-center gap-4 mt-6">
-          <button
-            onClick={() => navigate("/auth/login")}
-            className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
-          >
-            Sign In
-          </button>
-
-          <button
-            onClick={() => navigate("/auth/register")}
-            className="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700"
-          >
-            Sign Up
-          </button>
-        </div>
-      )}
-    </>
+      <div className="mt-6">
+        <Button variant="destructive" onClick={handleLogout}>
+          Logout
+        </Button>
+      </div>
+    </div>
   );
 }
 

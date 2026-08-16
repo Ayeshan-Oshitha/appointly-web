@@ -1,10 +1,9 @@
 import { apiClient } from "@/api/apiClient";
+import type { LoginResponseDto, RegisterResponseDto } from "@/models/auth.model";
 import type {
   LoginRequestDto,
-  LoginResponseDto,
   RegisterRequestDto,
-  RegisterResponseDto,
-} from "@/models/auth.model";
+} from "@/models/auth.schema";
 
 class AuthService {
   async login(data: LoginRequestDto): Promise<LoginResponseDto> {
@@ -16,7 +15,7 @@ class AuthService {
   }
 
   async register(data: RegisterRequestDto): Promise<RegisterResponseDto> {
-    const response = await apiClient.post<LoginResponseDto>(
+    const response = await apiClient.post<RegisterResponseDto>(
       "/auth/register",
       data
     );
