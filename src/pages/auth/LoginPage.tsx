@@ -1,4 +1,4 @@
-import AuthCard from "@/components/shared/AuthCard";
+import AuthLayout from "@/components/shared/AuthLayout";
 import FormErrorAlert from "@/components/shared/FormErrorAlert";
 import InputField from "@/components/shared/InputField";
 import Spinner from "@/components/shared/Spinner";
@@ -59,7 +59,7 @@ const LoginPage = () => {
   };
 
   return (
-    <AuthCard
+    <AuthLayout
       title="Welcome back"
       description="Sign in to your account to continue"
       footerText="Don't have an account? "
@@ -68,7 +68,7 @@ const LoginPage = () => {
     >
       <FormErrorAlert message={submitError} />
 
-      <form className="space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate>
+      <form className="space-y-5" onSubmit={handleSubmit(onSubmit)} noValidate>
         <InputField
           label="Email"
           type="email"
@@ -87,7 +87,12 @@ const LoginPage = () => {
           {...register("password")}
         />
 
-        <Button type="submit" className="w-full mt-6" disabled={isPending}>
+        <Button
+          type="submit"
+          size="lg"
+          className="mt-2 w-full"
+          disabled={isPending}
+        >
           {isPending ? (
             <>
               <Spinner className="mr-2" />
@@ -98,7 +103,7 @@ const LoginPage = () => {
           )}
         </Button>
       </form>
-    </AuthCard>
+    </AuthLayout>
   );
 };
 

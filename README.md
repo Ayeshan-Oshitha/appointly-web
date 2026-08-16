@@ -1,7 +1,8 @@
-# appointly-web
+# motorhub-web
 
 React frontend for the MotorHub API. Vite + React 19 + TypeScript, Tailwind CSS v4
 with shadcn/ui, TanStack Query, Zustand, React Hook Form + Zod, and axios.
+Typography is Inter, self-hosted via `@fontsource-variable/inter`.
 
 ## Prerequisites
 
@@ -66,6 +67,6 @@ request; a `401` response clears the session, and the route guards redirect to
 
 `ThemeProvider` (`src/providers/ThemeProvider.tsx`) toggles the `dark` class on
 `<html>`, which drives the Tailwind v4 tokens in `src/index.css`. It supports
-`light`, `dark`, and `system`, persisting the choice under the `appointly-theme`
+`light`, `dark`, and `system`, persisting the choice under the `motorhub-theme`
 localStorage key. An inline script in `index.html` applies the same class before
 first paint to avoid a flash of the wrong theme — keep the two in sync.

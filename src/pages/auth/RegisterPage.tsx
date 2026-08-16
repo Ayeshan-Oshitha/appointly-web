@@ -1,4 +1,4 @@
-import AuthCard from "@/components/shared/AuthCard";
+import AuthLayout from "@/components/shared/AuthLayout";
 import FormErrorAlert from "@/components/shared/FormErrorAlert";
 import InputField from "@/components/shared/InputField";
 import Spinner from "@/components/shared/Spinner";
@@ -53,19 +53,19 @@ const RegisterPage = () => {
   };
 
   return (
-    <AuthCard
+    <AuthLayout
       title="Create an account"
       description="Enter your details to get started"
       footerText="Already have an account? "
       footerLinkLabel="Sign in"
       footerLinkTo={PATHS.login}
-      className="max-w-lg"
+      width="wide"
     >
       <FormErrorAlert message={submitError} />
 
-      <form className="space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate>
-        <div className="flex flex-row gap-x-4 w-full">
-          <div className="flex-1">
+      <form className="space-y-5" onSubmit={handleSubmit(onSubmit)} noValidate>
+        <div className="grid gap-5 sm:grid-cols-2">
+          <div>
             <InputField
               label="First Name"
               type="text"
@@ -76,7 +76,7 @@ const RegisterPage = () => {
             />
           </div>
 
-          <div className="flex-1">
+          <div>
             <InputField
               label="Last Name"
               type="text"
@@ -115,7 +115,12 @@ const RegisterPage = () => {
           {...register("password")}
         />
 
-        <Button type="submit" className="w-full mt-6" disabled={isPending}>
+        <Button
+          type="submit"
+          size="lg"
+          className="mt-2 w-full"
+          disabled={isPending}
+        >
           {isPending ? (
             <>
               <Spinner className="mr-2" />
@@ -126,7 +131,7 @@ const RegisterPage = () => {
           )}
         </Button>
       </form>
-    </AuthCard>
+    </AuthLayout>
   );
 };
 

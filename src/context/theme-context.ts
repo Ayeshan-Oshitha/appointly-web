@@ -3,7 +3,7 @@ import { createContext } from "react";
 export type Theme = "light" | "dark" | "system";
 export type ResolvedTheme = "light" | "dark";
 
-export const THEME_STORAGE_KEY = "appointly-theme";
+export const THEME_STORAGE_KEY = "motorhub-theme";
 
 export interface ThemeContextValue {
   /** The user's preference, which may be "system". */

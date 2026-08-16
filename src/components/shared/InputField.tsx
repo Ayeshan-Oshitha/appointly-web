@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Eye, EyeOff } from "lucide-react";
+import { AlertCircle, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -27,7 +27,7 @@ const InputField = ({
 
   return (
     <div className="space-y-2">
-      <Label htmlFor={name} className="text-card-foreground">
+      <Label htmlFor={name} className="text-foreground">
         {label}
       </Label>
       <div className="relative">
@@ -38,9 +38,9 @@ const InputField = ({
           aria-invalid={!!error}
           aria-describedby={error ? errorId : undefined}
           className={cn(
-            "bg-background text-foreground w-full",
-            "focus-visible:ring-2 focus-visible:ring-ring/80 focus-visible:ring-offset-0",
-            isPasswordType && "pr-10",
+            "h-11 w-full bg-background text-foreground",
+            "focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-0",
+            isPasswordType && "pr-11",
             className
           )}
           {...props}
@@ -53,7 +53,7 @@ const InputField = ({
             onClick={() => setShowPassword((prev) => !prev)}
             aria-label={showPassword ? "Hide password" : "Show password"}
             aria-pressed={showPassword}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
           >
             {showPassword ? (
               <EyeOff className="h-4 w-4" />
@@ -67,8 +67,9 @@ const InputField = ({
         <p
           id={errorId}
           role="alert"
-          className="ml-2 mt-[-4px] text-sm font-medium text-destructive"
+          className="flex items-center gap-1.5 text-sm font-medium text-destructive"
         >
+          <AlertCircle aria-hidden className="size-3.5 shrink-0" />
           {error}
         </p>
       )}
